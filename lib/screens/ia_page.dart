@@ -40,7 +40,7 @@ class _ChatPageState extends State<ChatPage> {
         Uri.parse('https://openrouter.ai/api/v1/chat/completions'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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',
+          'Authorization': 'Bearer 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',
         },
         body: jsonEncode({
           "model": "deepseek/deepseek-r1:free",
