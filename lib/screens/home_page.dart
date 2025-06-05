@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   final List<Widget> _pages = const [
     _HomeContent(),//pagina de inicio con la ia
-    //SimpleChatScreen(),
+    SimpleChatScreen(),
     SchoolPage(),
     UsersTab(),
   ];
