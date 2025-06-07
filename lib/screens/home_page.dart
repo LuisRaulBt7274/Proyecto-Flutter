@@ -7,6 +7,7 @@ import 'ejercicios_page.dart';
 import '../widgets/counter_button.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'help_page.dart';
+import 'flashcards_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -524,19 +525,4 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
-// Asegúrate de tener definido FlashcardsPage en su propio archivo o en este contexto.
-class FlashcardsPage extends StatelessWidget {
-  const FlashcardsPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flashcards'),
-      ),
-      body: const Center(
-        child: Text('Aquí van las flashcards'),
-      ),
-    );
-  }
-}
