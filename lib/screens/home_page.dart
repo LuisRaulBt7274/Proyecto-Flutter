@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'ia_page.dart';
-import 'chat_page.dart';
 import 'school_page.dart';
 import 'profile_page.dart';
 import 'examenes_page.dart';
@@ -23,7 +22,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   final List<Widget> _pages = const [
     _HomeContent(),//pagina de inicio con la ia
-    SimpleChatScreen(),
+    ChatPage(),
     SchoolPage(),
     UsersTab(),
   ];
@@ -312,6 +311,19 @@ class _HomeContentState extends State<_HomeContent>
 
                                 const SizedBox(width: 16),
 
+                                // Caja Flashcards añadida aquí
+                                Expanded(
+                                  child: _StatCard(
+                                    count: '20',
+                                    label: 'FLASHCARDS',
+                                    icon: Icons.style_outlined,
+                                    color: Colors.orange.shade700,
+                                    page: const FlashcardsPage(),
+                                  ),
+                                ),
+
+                                const SizedBox(width: 16),
+
                                 Expanded(
                                   child: _StatCard(
                                     count: '30',
@@ -457,7 +469,6 @@ class _StatCard extends StatelessWidget {
                 color: Colors.grey.shade700,
                 letterSpacing: 0.5,
               ),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -481,40 +492,50 @@ class _QuickAction extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Icon(
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: theme.primaryColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
               icon,
+              size: 30,
               color: theme.primaryColor,
-              size: 20,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade200,
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.primaryColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Asegúrate de tener definido FlashcardsPage en su propio archivo o en este contexto.
+class FlashcardsPage extends StatelessWidget {
+  const FlashcardsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flashcards'),
+      ),
+      body: const Center(
+        child: Text('Aquí van las flashcards'),
       ),
     );
   }
