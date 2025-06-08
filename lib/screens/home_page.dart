@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'ia_page.dart';
-import 'chat_page.dart';
 import 'school_page.dart';
+import 'chat_page.dart';
 import 'profile_page.dart';
 import 'examenes_page.dart';
 import 'ejercicios_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'help_page.dart';
+import 'flashcards_page.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -228,8 +230,8 @@ class _HomeContentState extends State<_HomeContent>
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.deepPurple.withOpacity(0.15),
-            Colors.indigo.withOpacity(0.08),
+            const Color.fromARGB(255, 90, 83, 101).withOpacity(0.15),
+            const Color.fromARGB(255, 59, 60, 67).withOpacity(0.08),
             Colors.white,
           ],
         ),
@@ -259,18 +261,18 @@ class _HomeContentState extends State<_HomeContent>
                           offset: Offset(0, 20 * (1 - _fadeAnimation.value)),
                           child: Column(
                             children: [
-                              // Título principal con gradiente mejorado
+                              // TÃ­tulo principal con gradiente mejorado
                               ShaderMask(
                                 shaderCallback: (bounds) => LinearGradient(
                                   colors: [
                                     Colors.white,
-                                    Colors.cyan.shade200,
-                                    Colors.deepPurple.shade300,
+                                    const Color.fromARGB(255, 115, 122, 123),
+                                    const Color.fromARGB(255, 71, 68, 76),
                                   ],
                                   stops: const [0.0, 0.5, 1.0],
                                 ).createShader(bounds),
                                 child: const Text(
-                                  'FÍSICA',
+                                  'FISICA',
                                   style: TextStyle(
                                     fontSize: 34,
                                     fontWeight: FontWeight.w900,
@@ -297,7 +299,7 @@ class _HomeContentState extends State<_HomeContent>
 
                   const SizedBox(height: 40),
 
-                  // Icono principal animado con múltiples efectos
+                  // Icono principal animado con mÃºltiples efectos
                   SlideTransition(
                     position: _slideAnimation,
                     child: FadeTransition(
@@ -313,21 +315,21 @@ class _HomeContentState extends State<_HomeContent>
                               gradient: RadialGradient(
                                 colors: [
                                   Colors.white,
-                                  Colors.cyan.withOpacity(0.3),
-                                  Colors.deepPurple.withOpacity(0.4),
+                                  const Color.fromARGB(255, 49, 59, 60).withOpacity(0.3),
+                                  const Color.fromARGB(255, 100, 92, 114).withOpacity(0.4),
                                 ],
                                 stops: const [0.2, 0.6, 1.0],
                               ),
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.deepPurple.withOpacity(0.4),
+                                  color: const Color.fromARGB(255, 82, 76, 93).withOpacity(0.4),
                                   blurRadius: 25,
                                   offset: const Offset(0, 12),
                                   spreadRadius: 3,
                                 ),
                                 BoxShadow(
-                                  color: Colors.cyan.withOpacity(0.3),
+                                  color: const Color.fromARGB(255, 80, 117, 122).withOpacity(0.3),
                                   blurRadius: 40,
                                   offset: const Offset(0, 8),
                                 ),
@@ -343,7 +345,7 @@ class _HomeContentState extends State<_HomeContent>
                                 child: Icon(
                                   LucideIcons.atom,
                                   size: 65,
-                                  color: Colors.deepPurple.shade600,
+                                  color: const Color.fromARGB(255, 103, 92, 126),
                                 ),
                               ),
                             ),
@@ -355,7 +357,7 @@ class _HomeContentState extends State<_HomeContent>
 
                   const SizedBox(height: 50),
 
-                  // Tarjetas de estadísticas
+                  // Tarjetas de estadÃ­sticas
                   SlideTransition(
                     position: _slideAnimation,
                     child: ScaleTransition(
@@ -377,7 +379,7 @@ class _HomeContentState extends State<_HomeContent>
                             borderRadius: BorderRadius.circular(26),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.deepPurple.withOpacity(0.15),
+                                color: const Color.fromARGB(255, 72, 63, 88).withOpacity(0.15),
                                 blurRadius: 25,
                                 offset: const Offset(0, 12),
                                 spreadRadius: 2,
@@ -394,8 +396,8 @@ class _HomeContentState extends State<_HomeContent>
                               ShaderMask(
                                 shaderCallback: (bounds) => LinearGradient(
                                   colors: [
-                                    Colors.deepPurple.shade700,
-                                    Colors.cyan.shade600,
+                                    const Color.fromARGB(255, 0, 0, 0),
+                                    const Color.fromARGB(255, 0, 0, 0),
                                   ],
                                 ).createShader(bounds),
                                 child: Text(
@@ -424,10 +426,10 @@ class _HomeContentState extends State<_HomeContent>
                                           child: Opacity(
                                             opacity: _scaleAnimation.value,
                                             child: _StatCard(
-                                              count: '12',
-                                              label: 'EXÁMENES',
+                                              count: '',
+                                              label: 'EXAMENES',
                                               icon: Icons.quiz_outlined,
-                                              color: Colors.deepPurple.shade600,
+                                              color: const Color.fromARGB(255, 0, 40, 12),
                                               page: const ExamenesPage(),
                                             ),
                                           ),
@@ -437,6 +439,18 @@ class _HomeContentState extends State<_HomeContent>
                                   ),
 
                                   const SizedBox(width: 18),
+
+                                  Expanded(
+                                  child: _StatCard(
+                                    count: '',
+                                    label: 'FLASHCARDS',
+                                    icon: Icons.style_outlined,
+                                    color: const Color.fromARGB(255, 0, 40, 12),
+                                    page: const FlashcardsPage(),
+                                  ),
+                                ),
+
+                                const SizedBox(width: 16),
 
                                   Expanded(
                                     child: AnimatedBuilder(
@@ -450,10 +464,10 @@ class _HomeContentState extends State<_HomeContent>
                                           child: Opacity(
                                             opacity: _scaleAnimation.value,
                                             child: _StatCard(
-                                              count: '30',
+                                              count: '',
                                               label: 'EJERCICIOS',
                                               icon: Icons.assignment_outlined,
-                                              color: Colors.teal.shade600,
+                                              color: const Color.fromARGB(255, 0, 40, 12),
                                               page: const EjerciciosPage(),
                                             ),
                                           ),
@@ -472,7 +486,6 @@ class _HomeContentState extends State<_HomeContent>
 
                   const SizedBox(height: 30),
 
-                  // Accesos rápidos con ejercicios agregado
                   SlideTransition(
                     position: _slideAnimation,
                     child: FadeTransition(
@@ -492,19 +505,19 @@ class _HomeContentState extends State<_HomeContent>
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                     colors: [
-                                      Colors.deepPurple.withOpacity(0.12),
-                                      Colors.cyan.withOpacity(0.08),
+                                      const Color.fromARGB(255, 43, 40, 49).withOpacity(0.12),
+                                      const Color.fromARGB(255, 65, 84, 87).withOpacity(0.08),
                                       Colors.transparent,
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(22),
                                   border: Border.all(
-                                    color: Colors.deepPurple.withOpacity(0.25),
+                                    color: const Color.fromARGB(255, 5, 2, 9).withOpacity(0.25),
                                     width: 1.5,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.deepPurple.withOpacity(0.1),
+                                      color: const Color.fromARGB(255, 10, 6, 18).withOpacity(0.1),
                                       blurRadius: 20,
                                       offset: const Offset(0, 8),
                                     ),
@@ -516,7 +529,7 @@ class _HomeContentState extends State<_HomeContent>
                                     _QuickAction(
                                       icon: LucideIcons.bot,
                                       label: 'Asistente AI',
-                                      color: Colors.deepPurple.shade600,
+                                      color: const Color.fromARGB(255, 68, 61, 83),
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -524,21 +537,11 @@ class _HomeContentState extends State<_HomeContent>
                                         );
                                       },
                                     ),
-                                    _QuickAction(
-                                      icon: Icons.assignment_turned_in,
-                                      label: 'Ejercicios',
-                                      color: Colors.teal.shade600,
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (_) => const EjerciciosPage()),
-                                        );
-                                      },
-                                    ),
+                                    
                                     _QuickAction(
                                       icon: Icons.help_outline,
                                       label: 'Ayuda',
-                                      color: Colors.amber.shade600,
+                                      color: const Color.fromARGB(255, 54, 46, 59),
                                       onTap: () {
                                         Navigator.push(
                                           context,
