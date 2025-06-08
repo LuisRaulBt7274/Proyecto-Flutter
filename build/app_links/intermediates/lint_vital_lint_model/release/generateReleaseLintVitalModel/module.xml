@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="C:\Users\luis3\AppData\Local\Pub\Cache\hosted\pub.dev\app_links-6.4.0\android"
+    name=":app_links"
+    type="LIBRARY"
+    maven="com.llfbandit.app_links:app_links:1.0"
+    agpVersion="8.7.0"
+    buildFolder="C:\Users\luis3\AndroidStudioProjects\project\build\app_links"
+    bootClassPath="C:\Users\luis3\AppData\Local\Android\sdk\platforms\android-34\android.jar;C:\Users\luis3\AppData\Local\Android\sdk\build-tools\34.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>
