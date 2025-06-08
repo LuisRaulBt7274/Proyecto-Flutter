@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'chat_page.dart';
 import 'ia_page.dart';
+import 'chat_page.dart';
 import 'school_page.dart';
 import 'profile_page.dart';
 import 'examenes_page.dart';
 import 'ejercicios_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'help_page.dart';
-import 'flashcards_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -257,7 +256,7 @@ class _HomeContentState extends State<_HomeContent>
                       animation: _animationController,
                       builder: (context, child) {
                         return Transform.translate(
-                          offset: Offset(0,30 * (1 - _scaleAnimation.value.clamp(0.0, 1.0)),),
+                          offset: Offset(0, 20 * (1 - _fadeAnimation.value)),
                           child: Column(
                             children: [
                               // Título principal con gradiente mejorado
@@ -420,10 +419,10 @@ class _HomeContentState extends State<_HomeContent>
                                         return Transform.translate(
                                           offset: Offset(
                                             0,
-                                            30 * (1 - _scaleAnimation.value.clamp(0.0, 1.0)),
+                                            30 * (1 - _scaleAnimation.value),
                                           ),
-                                          child: FadeTransition(
-                                            opacity: _scaleAnimation,
+                                          child: Opacity(
+                                            opacity: _scaleAnimation.value,
                                             child: _StatCard(
                                               count: '12',
                                               label: 'EXÁMENES',
@@ -446,10 +445,10 @@ class _HomeContentState extends State<_HomeContent>
                                         return Transform.translate(
                                           offset: Offset(
                                             0,
-                                            30 * (1 - _scaleAnimation.value.clamp(0.0, 1.0)),
+                                            30 * (1 - _scaleAnimation.value),
                                           ),
-                                          child: FadeTransition(
-                                            opacity: _scaleAnimation,
+                                          child: Opacity(
+                                            opacity: _scaleAnimation.value,
                                             child: _StatCard(
                                               count: '30',
                                               label: 'EJERCICIOS',
