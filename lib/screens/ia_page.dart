@@ -14,6 +14,9 @@ class _ChatPageState extends State<ChatPage> {
   final List<Map<String, String>> _messages = [];
   bool _isLoading = false;
 
+  // Reemplaza con tu API Key de Gemini
+  static const String _geminiApiKey = 'AIzaSyCsv2eWD2TJkLNh9OQkt4lU2YqKUKm3yII';
+
   Future<void> _sendMessage(String text) async {
     setState(() {
       _messages.add({"role": "user", "content": text});
@@ -34,35 +37,69 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
 
-
     try {
+      // Construir el contexto de la conversación para Gemini
+      String conversationContext = "Eres un asistente de física llamado Fisibot que ayuda a resolver ejercicios y explicar conceptos de forma clara.\n\n";
+
+      // Agregar mensajes anteriores al contexto
+      for (int i = 0; i < _messages.length - 1; i++) {
+        final msg = _messages[i];
+        if (msg["role"] == "user") {
+          conversationContext += "Usuario: ${msg["content"]}\n";
+        } else {
+          conversationContext += "Asistente: ${msg["content"]}\n";
+        }
+      }
+
+      conversationContext += "Usuario: $text\nAsistente:";
+
       final response = await http.post(
-        Uri.parse('https://openrouter.ai/api/v1/chat/completions'),
+        Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$_geminiApiKey'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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',
         },
         body: jsonEncode({
-          "model": "deepseek/deepseek-r1:free",
-          "messages": [
-            {"role": "system", "content": "Eres un asistente de física llamado Fisibot que ayuda a resolver ejercicios y explicar conceptos de forma clara."},
-            ..._messages.map((msg) => {
-              "role": msg["role"]!,
-              "content": msg["content"]!
-            })
+          "contents": [
+            {
+              "parts": [
+                {
+                  "text": conversationContext
+                }
+              ]
+            }
           ],
+          "generationConfig": {
+            "temperature": 0.7,
+            "topK": 40,
+            "topP": 0.95,
+            "maxOutputTokens": 1024,
+          }
         }),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final reply = data['choices'][0]['message']['content'];
+
+        // Extraer la respuesta de Gemini
+        String reply = '';
+        if (data['candidates'] != null &&
+            data['candidates'].isNotEmpty &&
+            data['candidates'][0]['content'] != null &&
+            data['candidates'][0]['content']['parts'] != null &&
+            data['candidates'][0]['content']['parts'].isNotEmpty) {
+          reply = data['candidates'][0]['content']['parts'][0]['text'];
+
+          // Limpiar asteriscos de formato Markdown
+          reply = reply.replaceAll('**', '').replaceAll('*', '');
+        } else {
+          reply = 'No se pudo obtener respuesta del asistente.';
+        }
 
         setState(() {
-          _messages.add({"role": "assistant", "content": reply});
+          _messages.add({"role": "assistant", "content": reply.trim()});
         });
       } else {
-        throw Exception("Error: ${response.body}");
+        throw Exception("Error API: ${response.statusCode} - ${response.body}");
       }
     } catch (e) {
       setState(() {

@@ -165,11 +165,6 @@ class _SimpleChatScreenState extends State<SimpleChatScreen>
   Future<void> _sendTextMessage() async {
     if (_msgController.text.trim().isEmpty || _isLoading) return;
 
-    // Animación del botón
-    _sendButtonController.forward().then((_) {
-      _sendButtonController.reverse();
-    });
-
     final content = _msgController.text.trim();
     final userId = _supabase.auth.currentUser?.id;
 
