@@ -378,7 +378,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.info_outline, color: Colors.white),
+            Icon(Icons.info_outline, color: const Color.fromARGB(255, 255, 255, 255)),
             const SizedBox(width: 8),
             Expanded(child: Text(message)),
           ],
@@ -714,14 +714,14 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                             style: const TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 255, 252, 252),
                             ),
                           ),
                           Text(
                             '${percentage.toStringAsFixed(1)}%',
                             style: const TextStyle(
                               fontSize: 20,
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 253, 252, 252),
                             ),
                           ),
                         ],
@@ -735,7 +735,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                 child: Container(
                   margin: const EdgeInsets.only(top: 20),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 251, 250, 250),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
@@ -792,7 +792,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                                                       child: Text(
                                                         '${index + 1}',
                                                         style: const TextStyle(
-                                                          color: Colors.white,
+                                                          color: Color.fromARGB(255, 0, 0, 0),
                                                           fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
@@ -820,10 +820,12 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                     height: 1.3,
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
+                                                    color: Colors.black87, // <-- Color oscuro para mejor visibilidad
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    ),
+
                                                 const SizedBox(height: 12),
                                                 if (userAnswer != null) ...[
                                                   Container(
@@ -914,7 +916,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                               child: ElevatedButton(
                                 onPressed: _restartExam,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey.shade600,
+                                  backgroundColor: const Color.fromARGB(255, 115, 115, 115),
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
