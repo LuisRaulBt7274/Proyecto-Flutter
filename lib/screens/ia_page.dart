@@ -15,7 +15,7 @@ class _ChatPageState extends State<ChatPage> {
   bool _isLoading = false;
 
   // Reemplaza con tu API Key de Gemini
-  static const String _geminiApiKey = 'AIzaSyCsv2eWD2TJkLNh9OQkt4lU2YqKUKm3yII';
+  static const String _geminiApiKey = '';
 
   Future<void> _sendMessage(String text) async {
     setState(() {
