@@ -14,8 +14,8 @@ Future<void> main() async {
 
   // Configuración de Supabase optimizada
   await Supabase.initialize(
-    url: 'https://tygiotljvkfelnwyipih.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5Z2lvdGxqdmtmZWxud3lpcGloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MDI0NDEsImV4cCI6MjA2MzI3ODQ0MX0.lCtM2G7zhxpBc6OEb1CUluwmIf6YwNTvzkJqB4dUqtk',
+    url: '',
+    anonKey: '',
     storageOptions: const StorageClientOptions(
       retryAttempts: 3, // Reducido para mejor rendimiento
     ),
