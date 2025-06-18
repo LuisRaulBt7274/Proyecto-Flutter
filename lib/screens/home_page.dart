@@ -22,11 +22,76 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
-  final List<Widget> _pages = const [
-    _HomeContent(),//pagina de inicio con la ia
-    SimpleChatScreen(),
-    SchoolPage(),
-    UsersTab(),
+  // Envuelve cada página en un Builder para manejar errores
+  final List<Widget> _pages = [
+    Builder(
+      builder: (context) {
+        try {
+          return const _HomeContent();
+        } catch (e) {
+          return Container(
+            color: const Color(0xFF1A1A2E),
+            child: const Center(
+              child: Text(
+                'Error cargando inicio',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }
+      },
+    ),
+    Builder(
+      builder: (context) {
+        try {
+          return const SimpleChatScreen();
+        } catch (e) {
+          return Container(
+            color: const Color(0xFF1A1A2E),
+            child: const Center(
+              child: Text(
+                'Error cargando chat',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }
+      },
+    ),
+    Builder(
+      builder: (context) {
+        try {
+          return const SchoolPage();
+        } catch (e) {
+          return Container(
+            color: const Color(0xFF1A1A2E),
+            child: const Center(
+              child: Text(
+                'Error cargando temas',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }
+      },
+    ),
+    Builder(
+      builder: (context) {
+        try {
+          return const UsersTab();
+        } catch (e) {
+          return Container(
+            color: const Color(0xFF1A1A2E),
+            child: const Center(
+              child: Text(
+                'Error cargando perfil',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }
+      },
+    ),
   ];
 
   @override
@@ -51,6 +116,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void _onItemTapped(int index) {
     if (_selectedIndex != index) {
       setState(() => _selectedIndex = index);
+      // Reinicia la animación más suavemente
       _animationController.reset();
       _animationController.forward();
     }
@@ -67,9 +133,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: _pages[_selectedIndex],
+      backgroundColor: const Color(0xFF1A1A2E), // Fondo oscuro principal
+      body: Container(
+        color: const Color(0xFF1A1A2E), // Fondo adicional para evitar pantallazos
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: _pages,
+          ),
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -77,13 +150,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.white,
-              Colors.white.withOpacity(0.95),
+              const Color(0xFF16213E),
+              const Color(0xFF16213E).withOpacity(0.95),
             ],
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withOpacity(0.3),
               blurRadius: 10,
               offset: const Offset(0, -5),
             ),
@@ -95,8 +168,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: theme.primaryColor,
-          unselectedItemColor: Colors.grey.shade600,
+          selectedItemColor: const Color(0xFF64B5F6), // Azul claro para seleccionado
+          unselectedItemColor: const Color(0xFFB0BEC5), // Gris claro para no seleccionado
           selectedFontSize: 12,
           unselectedFontSize: 11,
           selectedLabelStyle: const TextStyle(
@@ -230,9 +303,9 @@ class _HomeContentState extends State<_HomeContent>
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color.fromARGB(255, 90, 83, 101).withOpacity(0.15),
-            const Color.fromARGB(255, 59, 60, 67).withOpacity(0.08),
-            Colors.white,
+            const Color(0xFF0F1419), // Azul muy oscuro arriba
+            const Color(0xFF16213E), // Azul oscuro medio
+            const Color(0xFF1A1A2E), // Azul oscuro abajo
           ],
         ),
       ),
@@ -261,13 +334,13 @@ class _HomeContentState extends State<_HomeContent>
                           offset: Offset(0, 20 * (1 - _fadeAnimation.value)),
                           child: Column(
                             children: [
-                              // TÃ­tulo principal con gradiente mejorado
+                              // Título principal con gradiente mejorado
                               ShaderMask(
                                 shaderCallback: (bounds) => LinearGradient(
                                   colors: [
-                                    Colors.white,
-                                    const Color.fromARGB(255, 115, 122, 123),
-                                    const Color.fromARGB(255, 71, 68, 76),
+                                    const Color(0xFF81C784), // Verde claro
+                                    const Color(0xFF64B5F6), // Azul claro
+                                    const Color(0xFFBA68C8), // Púrpura claro
                                   ],
                                   stops: const [0.0, 0.5, 1.0],
                                 ).createShader(bounds),
@@ -282,7 +355,7 @@ class _HomeContentState extends State<_HomeContent>
                                       Shadow(
                                         offset: Offset(2, 2),
                                         blurRadius: 10,
-                                        color: Colors.black26,
+                                        color: Colors.black54,
                                       ),
                                     ],
                                   ),
@@ -299,7 +372,7 @@ class _HomeContentState extends State<_HomeContent>
 
                   const SizedBox(height: 40),
 
-                  // Icono principal animado con mÃºltiples efectos
+                  // Icono principal animado con múltiples efectos
                   SlideTransition(
                     position: _slideAnimation,
                     child: FadeTransition(
@@ -314,22 +387,22 @@ class _HomeContentState extends State<_HomeContent>
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
                                 colors: [
-                                  Colors.white,
-                                  const Color.fromARGB(255, 49, 59, 60).withOpacity(0.3),
-                                  const Color.fromARGB(255, 100, 92, 114).withOpacity(0.4),
+                                  const Color(0xFF64B5F6).withOpacity(0.8), // Azul claro centro
+                                  const Color(0xFF81C784).withOpacity(0.6), // Verde claro medio
+                                  const Color(0xFF1A1A2E).withOpacity(0.4), // Oscuro borde
                                 ],
                                 stops: const [0.2, 0.6, 1.0],
                               ),
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color.fromARGB(255, 82, 76, 93).withOpacity(0.4),
+                                  color: const Color(0xFF64B5F6).withOpacity(0.5),
                                   blurRadius: 25,
                                   offset: const Offset(0, 12),
                                   spreadRadius: 3,
                                 ),
                                 BoxShadow(
-                                  color: const Color.fromARGB(255, 80, 117, 122).withOpacity(0.3),
+                                  color: const Color(0xFF81C784).withOpacity(0.3),
                                   blurRadius: 40,
                                   offset: const Offset(0, 8),
                                 ),
@@ -339,13 +412,13 @@ class _HomeContentState extends State<_HomeContent>
                               child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.95),
+                                  color: const Color(0xFFF5F5F5).withOpacity(0.95), // Blanco muy claro
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
                                   LucideIcons.atom,
                                   size: 65,
-                                  color: const Color.fromARGB(255, 103, 92, 126),
+                                  color: const Color(0xFF1A1A2E), // Oscuro para contraste
                                 ),
                               ),
                             ),
@@ -357,7 +430,7 @@ class _HomeContentState extends State<_HomeContent>
 
                   const SizedBox(height: 50),
 
-                  // Tarjetas de estadÃ­sticas
+                  // Tarjetas de estadísticas
                   SlideTransition(
                     position: _slideAnimation,
                     child: ScaleTransition(
@@ -371,21 +444,21 @@ class _HomeContentState extends State<_HomeContent>
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Colors.white,
-                                Colors.cyan.shade50.withOpacity(0.8),
-                                Colors.purple.shade50.withOpacity(0.6),
+                                const Color(0xFF263238), // Gris azulado oscuro
+                                const Color(0xFF37474F), // Gris azulado medio
+                                const Color(0xFF455A64), // Gris azulado claro
                               ],
                             ),
                             borderRadius: BorderRadius.circular(26),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color.fromARGB(255, 72, 63, 88).withOpacity(0.15),
+                                color: Colors.black.withOpacity(0.4),
                                 blurRadius: 25,
                                 offset: const Offset(0, 12),
                                 spreadRadius: 2,
                               ),
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
+                                color: Colors.black.withOpacity(0.2),
                                 blurRadius: 15,
                                 offset: const Offset(0, 5),
                               ),
@@ -396,8 +469,8 @@ class _HomeContentState extends State<_HomeContent>
                               ShaderMask(
                                 shaderCallback: (bounds) => LinearGradient(
                                   colors: [
-                                    const Color.fromARGB(255, 0, 0, 0),
-                                    const Color.fromARGB(255, 0, 0, 0),
+                                    const Color(0xFFE0E0E0), // Gris muy claro
+                                    const Color(0xFFF5F5F5), // Blanco casi puro
                                   ],
                                 ).createShader(bounds),
                                 child: Text(
@@ -429,7 +502,7 @@ class _HomeContentState extends State<_HomeContent>
                                               count: '',
                                               label: 'EXAMENES',
                                               icon: Icons.quiz_outlined,
-                                              color: const Color.fromARGB(255, 0, 40, 12),
+                                              color: const Color(0xFF81C784), // Verde claro
                                               page: const ExamenesPage(),
                                             ),
                                           ),
@@ -445,7 +518,7 @@ class _HomeContentState extends State<_HomeContent>
                                       count: '',
                                       label: 'FLASHCARDS',
                                       icon: Icons.style_outlined,
-                                      color: const Color.fromARGB(255, 0, 40, 12),
+                                      color: const Color(0xFF64B5F6), // Azul claro
                                       page: const FlashcardsPage(),
                                     ),
                                   ),
@@ -467,7 +540,7 @@ class _HomeContentState extends State<_HomeContent>
                                               count: '',
                                               label: 'EJERCICIOS',
                                               icon: Icons.assignment_outlined,
-                                              color: const Color.fromARGB(255, 0, 40, 12),
+                                              color: const Color(0xFFBA68C8), // Púrpura claro
                                               page: const EjerciciosPage(),
                                             ),
                                           ),
@@ -505,19 +578,19 @@ class _HomeContentState extends State<_HomeContent>
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                     colors: [
-                                      const Color.fromARGB(255, 43, 40, 49).withOpacity(0.12),
-                                      const Color.fromARGB(255, 65, 84, 87).withOpacity(0.08),
-                                      Colors.transparent,
+                                      const Color(0xFF263238).withOpacity(0.8), // Gris azulado oscuro
+                                      const Color(0xFF37474F).withOpacity(0.6), // Gris azulado medio
+                                      const Color(0xFF455A64).withOpacity(0.4), // Gris azulado claro
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(22),
                                   border: Border.all(
-                                    color: const Color.fromARGB(255, 5, 2, 9).withOpacity(0.25),
+                                    color: const Color(0xFF64B5F6).withOpacity(0.3), // Borde azul claro
                                     width: 1.5,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color.fromARGB(255, 10, 6, 18).withOpacity(0.1),
+                                      color: Colors.black.withOpacity(0.3),
                                       blurRadius: 20,
                                       offset: const Offset(0, 8),
                                     ),
@@ -529,7 +602,7 @@ class _HomeContentState extends State<_HomeContent>
                                     _QuickAction(
                                       icon: LucideIcons.bot,
                                       label: 'Asistente AI',
-                                      color: const Color.fromARGB(255, 68, 61, 83),
+                                      color: const Color(0xFF81C784), // Verde claro
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -541,7 +614,7 @@ class _HomeContentState extends State<_HomeContent>
                                     _QuickAction(
                                       icon: Icons.help_outline,
                                       label: 'Ayuda',
-                                      color: const Color.fromARGB(255, 54, 46, 59),
+                                      color: const Color(0xFF64B5F6), // Azul claro
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -647,14 +720,14 @@ class _StatCardState extends State<_StatCard> with SingleTickerProviderStateMixi
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.white,
-                    widget.color.withOpacity(0.08),
-                    widget.color.withOpacity(0.15),
+                    const Color(0xFF546E7A), // Gris azulado claro
+                    const Color(0xFF455A64), // Gris azulado medio
+                    const Color(0xFF37474F), // Gris azulado oscuro
                   ],
                 ),
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: widget.color.withOpacity(0.3),
+                  color: widget.color.withOpacity(0.5), // Borde más visible
                   width: 1.5,
                 ),
                 boxShadow: [
@@ -665,7 +738,7 @@ class _StatCardState extends State<_StatCard> with SingleTickerProviderStateMixi
                     spreadRadius: 2,
                   ),
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withOpacity(0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -678,14 +751,14 @@ class _StatCardState extends State<_StatCard> with SingleTickerProviderStateMixi
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         colors: [
-                          widget.color.withOpacity(0.2),
+                          widget.color.withOpacity(0.3),
                           widget.color.withOpacity(0.1),
                         ],
                       ),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: widget.color.withOpacity(0.3),
+                          color: widget.color.withOpacity(0.4),
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
@@ -702,7 +775,7 @@ class _StatCardState extends State<_StatCard> with SingleTickerProviderStateMixi
                     shaderCallback: (bounds) => LinearGradient(
                       colors: [
                         widget.color,
-                        widget.color.withOpacity(0.7),
+                        widget.color.withOpacity(0.8),
                       ],
                     ).createShader(bounds),
                     child: Text(
@@ -717,10 +790,10 @@ class _StatCardState extends State<_StatCard> with SingleTickerProviderStateMixi
                   const SizedBox(height: 6),
                   Text(
                     widget.label,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Colors.grey.shade700,
+                      color: Color(0xFFE0E0E0), // Gris muy claro para legibilidad
                       letterSpacing: 0.6,
                     ),
                     textAlign: TextAlign.center,
@@ -799,26 +872,26 @@ class _QuickActionState extends State<_QuickAction> with SingleTickerProviderSta
                   decoration: BoxDecoration(
                     gradient: RadialGradient(
                       colors: [
-                        Colors.white,
-                        widget.color.withOpacity(0.1),
+                        const Color(0xFF546E7A), // Gris azulado claro
+                        const Color(0xFF455A64), // Gris azulado medio
                       ],
                     ),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: widget.color.withOpacity(0.3),
+                        color: widget.color.withOpacity(0.4),
                         blurRadius: 15,
                         offset: const Offset(0, 5),
                         spreadRadius: 2,
                       ),
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
                     ],
                     border: Border.all(
-                      color: widget.color.withOpacity(0.2),
+                      color: widget.color.withOpacity(0.4),
                       width: 1,
                     ),
                   ),
@@ -831,10 +904,10 @@ class _QuickActionState extends State<_QuickAction> with SingleTickerProviderSta
                 const SizedBox(height: 10),
                 Text(
                   widget.label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFFE0E0E0), // Gris muy claro para legibilidad
                     letterSpacing: 0.5,
                   ),
                 ),

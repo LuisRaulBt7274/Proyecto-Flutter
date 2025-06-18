@@ -1,4 +1,4 @@
-#Sun Jun 08 16:03:31 CST 2025
+#Mon Jun 09 08:51:06 CST 2025
 base.0=C\:\\Users\\luis3\\AndroidStudioProjects\\project\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
