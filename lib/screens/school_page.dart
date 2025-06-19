@@ -11,22 +11,8 @@ class SchoolPage extends StatefulWidget {
   State<SchoolPage> createState() => _SchoolPageState();
 }
 
-class _SchoolPageState extends State<SchoolPage>
-    with TickerProviderStateMixin {
+class _SchoolPageState extends State<SchoolPage> {
   final _supabase = Supabase.instance.client;
-
-  // Controladores de animación
-  late AnimationController _mainAnimationController;
-  late AnimationController _questionAnimationController;
-  late AnimationController _pulseController;
-  late AnimationController _countdownController;
-
-  // Animaciones
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _pulseAnimation;
-  late Animation<double> _countdownScaleAnimation;
 
   // Estado del juego
   String _gameState = 'waiting'; // waiting, ready_check, playing, finished, results
@@ -58,7 +44,6 @@ class _SchoolPageState extends State<SchoolPage>
   static const List<Color> _accentGradient = [
     Color.fromARGB(255, 175, 14, 238),
     Color.fromARGB(255, 14, 236, 81)];
-
 
   // Preguntas predefinidas
   final List<Map<String, dynamic>> _defaultQuestions = [
@@ -117,54 +102,8 @@ class _SchoolPageState extends State<SchoolPage>
   @override
   void initState() {
     super.initState();
-    _setupAnimations();
     _initializeGame();
     _listenToGameUpdates();
-  }
-
-  void _setupAnimations() {
-    _mainAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _questionAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
-
-    _countdownController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _mainAnimationController, curve: Curves.easeOutCubic),
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _mainAnimationController, curve: Curves.elasticOut),
-    );
-
-    _slideAnimation = Tween<double>(begin: 50.0, end: 0.0).animate(
-      CurvedAnimation(parent: _mainAnimationController, curve: Curves.easeOutBack),
-    );
-
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-
-    _countdownScaleAnimation = Tween<double>(begin: 1.0, end: 1.3).animate(
-      CurvedAnimation(parent: _countdownController, curve: Curves.easeInOut),
-    );
-
-    _mainAnimationController.forward();
-    _pulseController.repeat(reverse: true);
   }
 
   Future<void> _initializeGame() async {
@@ -183,14 +122,14 @@ class _SchoolPageState extends State<SchoolPage>
       },
       {
         'id': 'player2',
-        'nombre': 'RAUL',
+        'nombre': 'Mel',
         'listo': true,
         'puntuacion': 0,
         'estado': 'conectado'
       },
       {
         'id': 'player3',
-        'nombre': 'Angel',
+        'nombre': 'Fer',
         'listo': true,
         'puntuacion': 0,
         'estado': 'conectado'
@@ -266,39 +205,30 @@ class _SchoolPageState extends State<SchoolPage>
       builder: (context) => Material(
         color: Colors.transparent,
         child: Center(
-          child: TweenAnimationBuilder<double>(
-            duration: const Duration(milliseconds: 800),
-            tween: Tween(begin: 0.0, end: 1.0),
-            builder: (context, value, child) {
-              return Transform.scale(
-                scale: value,
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: _accentGradient),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: _accentGradient[0].withOpacity(0.5),
-                        blurRadius: 30,
-                        spreadRadius: 10,
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      '$number',
-                      style: const TextStyle(
-                        fontSize: 72,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 90, 9, 9),
-                      ),
-                    ),
-                  ),
+          child: Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: _accentGradient),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: _accentGradient[0].withOpacity(0.5),
+                  blurRadius: 30,
+                  spreadRadius: 10,
                 ),
-              );
-            },
+              ],
+            ),
+            child: Center(
+              child: Text(
+                '$number',
+                style: const TextStyle(
+                  fontSize: 72,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 90, 9, 9),
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -323,21 +253,12 @@ class _SchoolPageState extends State<SchoolPage>
 
   void _startQuestionTimer() {
     _timeRemaining = 15;
-    _questionAnimationController.reset();
-    _questionAnimationController.forward();
-
     _questionTimer?.cancel();
     _questionTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timeRemaining > 0) {
         setState(() {
           _timeRemaining--;
         });
-
-        if (_timeRemaining <= 3) {
-          _countdownController.forward().then((_) {
-            _countdownController.reverse();
-          });
-        }
       } else {
         timer.cancel();
         if (!_hasAnswered) {
@@ -353,7 +274,7 @@ class _SchoolPageState extends State<SchoolPage>
     setState(() {
       _selectedAnswer = answer;
     });
-    _submitAnswer(answer); // AGREGAR ESTA LÍNEA
+    _submitAnswer(answer);
   }
 
   Future<void> _submitAnswer(String? answer) async {
@@ -415,73 +336,64 @@ class _SchoolPageState extends State<SchoolPage>
       builder: (context) => Material(
         color: Colors.black54,
         child: Center(
-          child: TweenAnimationBuilder<double>(
-            duration: const Duration(milliseconds: 600),
-            tween: Tween(begin: 0.0, end: 1.0),
-            builder: (context, value, child) {
-              return Transform.scale(
-                scale: value,
-                child: Container(
-                  margin: const EdgeInsets.all(40),
-                  padding: const EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: isCorrect ? _successGradient : _errorGradient,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: (isCorrect ? _successGradient[0] : _errorGradient[0])
-                            .withOpacity(0.5),
-                        blurRadius: 30,
-                        spreadRadius: 5,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        isCorrect ? Icons.check_circle : Icons.cancel,
-                        size: 80,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        isCorrect ? '¡Correcto!' : '¡Incorrecto!',
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      if (points > 0) ...[
-                        const SizedBox(height: 10),
-                        Text(
-                          '+$points puntos',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                      if (!isCorrect) ...[
-                        const SizedBox(height: 15),
-                        Text(
-                          'Respuesta correcta: ${_questions[_currentQuestionIndex]['respuesta_correcta']}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ],
+          child: Container(
+            margin: const EdgeInsets.all(40),
+            padding: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: isCorrect ? _successGradient : _errorGradient,
+              ),
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: (isCorrect ? _successGradient[0] : _errorGradient[0])
+                      .withOpacity(0.5),
+                  blurRadius: 30,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  isCorrect ? Icons.check_circle : Icons.cancel,
+                  size: 80,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  isCorrect ? '¡Correcto!' : '¡Incorrecto!',
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-              );
-            },
+                if (points > 0) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    '+$points puntos',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+                if (!isCorrect) ...[
+                  const SizedBox(height: 15),
+                  Text(
+                    'Respuesta correcta: ${_questions[_currentQuestionIndex]['respuesta_correcta']}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
       ),
@@ -553,26 +465,11 @@ class _SchoolPageState extends State<SchoolPage>
             colors: [
               _primaryGradient[0].withOpacity(0.1),
               _accentGradient[1].withOpacity(0.05),
-
             ],
           ),
         ),
         child: SafeArea(
-          child: AnimatedBuilder(
-            animation: _fadeAnimation,
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(0, _slideAnimation.value),
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: _buildCurrentScreen(),
-                  ),
-                ),
-              );
-            },
-          ),
+          child: _buildCurrentScreen(),
         ),
       ),
     );
@@ -671,32 +568,24 @@ class _SchoolPageState extends State<SchoolPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AnimatedBuilder(
-                  animation: _pulseAnimation,
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _pulseAnimation.value,
-                      child: Container(
-                        padding: const EdgeInsets.all(40),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: _accentGradient),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: _accentGradient[0].withOpacity(0.5),
-                              blurRadius: 30,
-                              spreadRadius: 10,
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.rocket_launch,
-                          size: 80,
-                          color: Colors.white,
-                        ),
+                Container(
+                  padding: const EdgeInsets.all(40),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: _accentGradient),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: _accentGradient[0].withOpacity(0.5),
+                        blurRadius: 30,
+                        spreadRadius: 10,
                       ),
-                    );
-                  },
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.rocket_launch,
+                    size: 80,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 40),
                 const Text(
@@ -738,40 +627,29 @@ class _SchoolPageState extends State<SchoolPage>
             child: Column(
               children: [
                 // Pregunta
-                AnimatedBuilder(
-                  animation: _questionAnimationController,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 30 * (1 - _questionAnimationController.value)),
-                      child: Opacity(
-                        opacity: _questionAnimationController.value,
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(25),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: _primaryGradient),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: _primaryGradient[0].withOpacity(0.3),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            question['pregunta'],
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: _primaryGradient),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: _primaryGradient[0].withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
-                    );
-                  },
+                    ],
+                  ),
+                  child: Text(
+                    question['pregunta'],
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
 
                 const SizedBox(height: 30),
@@ -790,20 +668,7 @@ class _SchoolPageState extends State<SchoolPage>
                       final option = question['opciones'][index];
                       final colors = [_accentGradient, _successGradient, _errorGradient, _primaryGradient];
                       final gradient = colors[index % colors.length];
-
-                      return TweenAnimationBuilder<double>(
-                        duration: Duration(milliseconds: 600 + (index * 100)),
-                        tween: Tween(begin: 0.0, end: 1.0),
-                        builder: (context, value, child) {
-                          return Transform.translate(
-                            offset: Offset(0, 30 * (1 - value)),
-                            child: Opacity(
-                              opacity: value,
-                              child: _buildAnswerOption(option, gradient, index),
-                            ),
-                          );
-                        },
-                      );
+                      return _buildAnswerOption(option, gradient, index);
                     },
                   ),
                 ),
@@ -820,8 +685,7 @@ class _SchoolPageState extends State<SchoolPage>
 
     return GestureDetector(
       onTap: () => _selectAnswer(option),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+      child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           gradient: isSelected
@@ -881,28 +745,20 @@ class _SchoolPageState extends State<SchoolPage>
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              AnimatedBuilder(
-                animation: _countdownScaleAnimation,
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: _timeRemaining <= 3 ? _countdownScaleAnimation.value : 1.0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: _timeRemaining <= 5 ? Colors.red : Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        '$_timeRemaining s',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                decoration: BoxDecoration(
+                  color: _timeRemaining <= 5 ? Colors.red : Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '$_timeRemaining s',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
@@ -1080,84 +936,72 @@ class _SchoolPageState extends State<SchoolPage>
     final isCurrentPlayer = player['id'] == (_supabase.auth.currentUser?.id ?? 'player1');
     final isReady = player['listo'] ?? false;
 
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 600),
-      tween: Tween(begin: 0.0, end: 1.0),
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(30 * (1 - value), 0),
-          child: Opacity(
-            opacity: value,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: isCurrentPlayer
-                    ? LinearGradient(colors: _accentGradient.map((c) => c.withOpacity(0.1)).toList())
-                    : null,
-                color: isCurrentPlayer ? null : Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color: isCurrentPlayer ? _accentGradient[0] : Colors.grey.shade300,
-                  width: isCurrentPlayer ? 2 : 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: isReady ? _successGradient[0] : Colors.grey.shade400,
-                    child: Text(
-                      player['nombre'][0].toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          player['nombre'],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: isCurrentPlayer ? _accentGradient[0] : Colors.black87,
-                          ),
-                        ),
-                        Text(
-                          player['estado'] ?? 'Conectado',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: isReady ? _successGradient[0] : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      isReady ? 'Listo' : 'Esperando',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isReady ? Colors.white : Colors.grey.shade600,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: isCurrentPlayer
+            ? LinearGradient(colors: _accentGradient.map((c) => c.withOpacity(0.1)).toList())
+            : null,
+        color: isCurrentPlayer ? null : Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: isCurrentPlayer ? _accentGradient[0] : Colors.grey.shade300,
+          width: isCurrentPlayer ? 2 : 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: isReady ? _successGradient[0] : Colors.grey.shade400,
+            child: Text(
+              player['nombre'][0].toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        );
-      },
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  player['nombre'],
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isCurrentPlayer ? _accentGradient[0] : Colors.black87,
+                  ),
+                ),
+                Text(
+                  player['estado'] ?? 'Conectado',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: isReady ? _successGradient[0] : Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              isReady ? 'Listo' : 'Esperando',
+              style: TextStyle(
+                fontSize: 12,
+                color: isReady ? Colors.white : Colors.grey.shade600,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1165,91 +1009,79 @@ class _SchoolPageState extends State<SchoolPage>
     final isCurrentPlayer = player['id'] == (_supabase.auth.currentUser?.id ?? 'player1');
     final medal = position == 0 ? '🏆' : position == 1 ? '🥈' : position == 2 ? '🥉' : '${position + 1}°';
 
-    return TweenAnimationBuilder<double>(
-      duration: Duration(milliseconds: 600 + (position * 100)),
-      tween: Tween(begin: 0.0, end: 1.0),
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(30 * (1 - value), 0),
-          child: Opacity(
-            opacity: value,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: isCurrentPlayer
-                    ? LinearGradient(colors: _accentGradient.map((c) => c.withOpacity(0.1)).toList())
-                    : null,
-                color: isCurrentPlayer ? null : Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color: isCurrentPlayer ? _accentGradient[0] : Colors.grey.shade300,
-                  width: isCurrentPlayer ? 2 : 1,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: isCurrentPlayer
+            ? LinearGradient(colors: _accentGradient.map((c) => c.withOpacity(0.1)).toList())
+            : null,
+        color: isCurrentPlayer ? null : Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: isCurrentPlayer ? _accentGradient[0] : Colors.grey.shade300,
+          width: isCurrentPlayer ? 2 : 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: position < 3 ? _successGradient[0] : Colors.grey.shade400,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                medal,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: position < 3 ? _successGradient[0] : Colors.grey.shade400,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        medal,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          player['nombre'],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: isCurrentPlayer ? _accentGradient[0] : Colors.black87,
-                          ),
-                        ),
-                        Text(
-                          'Posición ${position + 1}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: _primaryGradient),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      '${player['puntuacion']} pts',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
-        );
-      },
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  player['nombre'],
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isCurrentPlayer ? _accentGradient[0] : Colors.black87,
+                  ),
+                ),
+                Text(
+                  'Posición ${position + 1}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: _primaryGradient),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              '${player['puntuacion']} pts',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1260,49 +1092,37 @@ class _SchoolPageState extends State<SchoolPage>
   }) {
     return SizedBox(
       width: double.infinity,
-      child: AnimatedBuilder(
-        animation: _pulseAnimation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: 1.0,
-            child: ElevatedButton(
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                elevation: 8,
-                shadowColor: gradient[0].withOpacity(0.3),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: gradient),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          elevation: 8,
+          shadowColor: gradient[0].withOpacity(0.3),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: gradient),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
 
   @override
   void dispose() {
-    _mainAnimationController.dispose();
-    _questionAnimationController.dispose();
-    _pulseController.dispose();
-    _countdownController.dispose();
     _questionTimer?.cancel();
     super.dispose();
   }
