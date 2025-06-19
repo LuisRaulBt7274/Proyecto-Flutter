@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 class FlashcardsPage extends StatefulWidget {
@@ -7,333 +8,236 @@ class FlashcardsPage extends StatefulWidget {
   State<FlashcardsPage> createState() => _FlashcardsPageState();
 }
 
-class _FlashcardsPageState extends State<FlashcardsPage> with TickerProviderStateMixin {
+class _FlashcardsPageState extends State<FlashcardsPage> {
   final List<Map<String, String>> flashcards = [
-    {'question': '¿Qué es la física?', 'answer': 'La física es la rama de la ciencia que estudia las propiedades del espacio, tiempo, materia y energía, así como sus interacciones.'},
-    {'question': '¿Cuál es la diferencia entre masa y peso?', 'answer': 'La masa es la cantidad de materia que tiene un cuerpo, mientras que el peso es la fuerza con que la gravedad atrae a ese cuerpo hacia la Tierra.'},
-    {'question': '¿Qué es la inercia?', 'answer': 'Es la propiedad de los cuerpos de mantener su estado de reposo o movimiento rectilíneo uniforme a menos que una fuerza externa actúe sobre ellos.'},
-    {'question': '¿En qué consiste la primera ley de Newton?', 'answer': 'Todo objeto permanece en estado de reposo o de movimiento rectilíneo uniforme a menos que una fuerza externa no equilibrada actúe sobre él.'},
-    {'question': '¿Qué es la aceleración?', 'answer': 'La aceleración es la tasa de cambio de la velocidad con respecto al tiempo.'},
-    {'question': '¿Cuál es la fórmula para calcular la velocidad?', 'answer': 'Velocidad es el desplazamiento dividido por el tiempo.'},
-    {'question': '¿Qué es la energía cinética?', 'answer': 'Es la energía que posee un cuerpo debido a su movimiento.'},
-    {'question': '¿Qué es la energía potencial gravitatoria?', 'answer': 'Es la energía almacenada en un cuerpo debido a su posición en un campo gravitacional.'},
-    {'question': '¿Qué es el trabajo en física y cómo se calcula?', 'answer': 'Trabajo es la fuerza aplicada sobre un objeto multiplicada por el desplazamiento en la dirección de la fuerza: W=Fxd'},
-    {'question': '¿Cuál es la diferencia entre un vector y un escalar?', 'answer': 'Un vector tiene magnitud, dirección y sentido; un escalar solo tiene magnitud.'},
-    {'question': '¿Qué es la fuerza y cuál es su unidad en el Sistema Internacional?', 'answer': 'La fuerza es toda causa capaz de deformar un cuerpo o cambiar su estado de movimiento; su unidad es el newton (N).'},
-    {'question': '¿Qué es la ley de la conservación de la energía?', 'answer': 'La energía no se crea ni se destruye, solo se transforma de una forma a otra.'},
+    {'question': '¿Qué es la física?', 'answer': 'La física estudia las propiedades del espacio, tiempo, materia y energía.'},
+    {'question': '¿Cuál es la diferencia entre masa y peso?', 'answer': 'La masa es cantidad de materia, el peso es la fuerza con que la gravedad atrae esa masa.'},
+    {'question': '¿Qué es la inercia?', 'answer': 'Es la propiedad de los cuerpos de resistirse al cambio de su estado de movimiento.'},
+    {'question': '¿En qué consiste la primera ley de Newton?', 'answer': 'Todo cuerpo permanece en reposo o MRU a menos que una fuerza lo modifique.'},
+    {'question': '¿Qué es la aceleración?', 'answer': 'Es el cambio de velocidad respecto al tiempo.'},
+    {'question': '¿Cuál es la fórmula para calcular la velocidad?', 'answer': 'Velocidad = desplazamiento / tiempo.'},
+    {'question': '¿Qué es la energía cinética?', 'answer': 'Energía asociada al movimiento de un objeto.'},
+    {'question': '¿Qué es la energía potencial gravitatoria?', 'answer': 'Energía debida a la posición de un objeto en un campo gravitacional.'},
+    {'question': '¿Qué es el trabajo y cómo se calcula?', 'answer': 'Trabajo = fuerza × desplazamiento en dirección de la fuerza.'},
+    {'question': '¿Qué es un vector?', 'answer': 'Cantidad con magnitud y dirección.'},
+    {'question': '¿Qué es un escalar?', 'answer': 'Cantidad que solo tiene magnitud.'},
+    {'question': '¿Qué es la fuerza y su unidad en SI?', 'answer': 'Es una interacción que cambia el movimiento, se mide en newtons (N).'},
+    {'question': '¿Qué dice la ley de conservación de la energía?', 'answer': 'La energía no se crea ni se destruye, solo se transforma.'},
+    {'question': '¿Qué es velocidad promedio?', 'answer': 'Es desplazamiento total dividido entre el tiempo total.'},
+    {'question': '¿Qué es la ley de Hooke?', 'answer': 'F = -k·x, donde F es fuerza, k es constante, x es elongación.'},
+    {'question': '¿Qué es una onda?', 'answer': 'Perturbación que transporta energía sin transportar materia.'},
+    {'question': '¿Qué es el momento lineal?', 'answer': 'Cantidad de movimiento: masa × velocidad.'},
+    {'question': '¿Qué dice el principio de Arquímedes?', 'answer': 'Un cuerpo en un fluido recibe un empuje igual al peso del fluido desplazado.'},
+    {'question': '¿Qué es un circuito en serie?', 'answer': 'Circuito donde la corriente pasa por un solo camino.'},
+    {'question': '¿Qué es resistencia eléctrica?', 'answer': 'Oposición al paso de la corriente en un conductor.'},
+    {'question': '¿Qué es la ley de Ohm?', 'answer': 'V = I·R, voltaje es corriente por resistencia.'},
+    {'question': '¿Qué son los conductores?', 'answer': 'Materiales que permiten el paso fácil de corriente eléctrica.'},
+    {'question': '¿Qué es la temperatura?', 'answer': 'Medida de la energía cinética promedio de las partículas.'},
+    {'question': '¿Qué es el calor?', 'answer': 'Transferencia de energía térmica de un cuerpo a otro.'},
+    {'question': '¿Qué es un sistema termodinámico?', 'answer': 'Conjunto de cuerpos que interactúan térmicamente.'},
+    {'question': '¿Qué es una colisión elástica?', 'answer': 'Choque donde se conserva la energía cinética total.'},
+    {'question': '¿Qué es una palanca?', 'answer': 'Máquina simple que amplifica fuerza usando un punto de apoyo.'},
+    {'question': '¿Qué es una máquina simple?', 'answer': 'Dispositivo que cambia la magnitud o dirección de una fuerza.'},
+    {'question': '¿Qué es la frecuencia?', 'answer': 'Número de ciclos por segundo, se mide en Hz.'},
+    {'question': '¿Qué es la longitud de onda?', 'answer': 'Distancia entre dos crestas consecutivas de una onda.'},
+    {'question': '¿Qué es el periodo?', 'answer': 'Tiempo que tarda un ciclo completo de una onda.'},
+    {'question': '¿Qué es el sonido?', 'answer': 'Onda mecánica longitudinal que se propaga por un medio.'},
+    {'question': '¿Qué es la refracción?', 'answer': 'Cambio de dirección de una onda al cambiar de medio.'},
+    {'question': '¿Qué es la presión?', 'answer': 'Es la fuerza aplicada por unidad de área.'},
+    {'question': '¿Qué es el principio de Pascal?', 'answer': 'Un cambio de presión aplicado a un fluido se transmite uniformemente en todas direcciones.'},
+    {'question': '¿Qué es la ley de Boyle?', 'answer': 'Para una masa fija de gas a temperatura constante, presión y volumen son inversamente proporcionales.'},
+    {'question': '¿Qué es la ley de Charles?', 'answer': 'El volumen de un gas es directamente proporcional a su temperatura absoluta a presión constante.'},
+    {'question': '¿Qué es la densidad?', 'answer': 'Masa por unidad de volumen de una sustancia.'},
+    {'question': '¿Qué es la electricidad?', 'answer': 'Fenómeno físico asociado al movimiento y acumulación de cargas eléctricas.'},
+    {'question': '¿Qué es un conductor eléctrico?', 'answer': 'Material que permite el flujo fácil de electrones.'},
+    {'question': '¿Qué es un aislante eléctrico?', 'answer': 'Material que dificulta el paso de la corriente eléctrica.'},
+    {'question': '¿Qué es el campo eléctrico?', 'answer': 'Región del espacio donde una carga eléctrica experimenta una fuerza.'},
+    {'question': '¿Qué es la intensidad de corriente?', 'answer': 'Cantidad de carga que pasa por un punto en un segundo.'},
+    {'question': '¿Qué es la energía mecánica?', 'answer': 'Suma de energía cinética y potencial de un sistema.'},
+    {'question': '¿Qué es un movimiento acelerado?', 'answer': 'Movimiento con cambio de velocidad en magnitud o dirección.'},
+    {'question': '¿Qué es la fricción?', 'answer': 'Fuerza que se opone al movimiento relativo entre dos superficies en contacto.'},
+    {'question': '¿Qué es el calor específico?', 'answer': 'Cantidad de calor necesaria para elevar la temperatura de un gramo de sustancia en un grado Celsius.'},
+    {'question': '¿Qué es el principio de conservación del momento?', 'answer': 'El momento lineal total de un sistema aislado se conserva.'},
+    {'question': '¿Qué es un campo magnético?', 'answer': 'Zona en la que una carga en movimiento experimenta una fuerza magnética.'},
+    {'question': '¿Qué es la inducción electromagnética?', 'answer': 'Generación de una corriente eléctrica en un conductor debido a un cambio en el flujo magnético.'},
+    {'question': '¿Qué es la energía térmica?', 'answer': 'Energía asociada al movimiento microscópico de las partículas de un cuerpo.'},
+    {'question': '¿Qué es un isotopo?', 'answer': 'Átomos del mismo elemento con diferente número de neutrones.'},
+    {'question': '¿Qué es la radiación?', 'answer': 'Emisión de energía en forma de ondas o partículas.'},
+    {'question': '¿Qué es el principio de Arquímedes?', 'answer': 'Un cuerpo sumergido en un fluido recibe un empuje igual al peso del fluido desplazado.'},
+    {'question': '¿Qué es la velocidad angular?', 'answer': 'Tasa de cambio del ángulo por unidad de tiempo en un movimiento circular.'},
+    {'question': '¿Qué es un sistema aislado?', 'answer': 'Sistema que no intercambia energía ni materia con el exterior.'},
+    {'question': '¿Qué es el potencial eléctrico?', 'answer': 'Trabajo por unidad de carga para mover una carga desde un punto hasta otro.'},
+    {'question': '¿Qué es la ley de Kirchhoff?', 'answer': 'En un nodo, la suma de corrientes entrantes es igual a la suma de corrientes salientes.'},
+    {'question': '¿Qué es la frecuencia de resonancia?', 'answer': 'Frecuencia a la que un sistema oscila con máxima amplitud.'},
+    {'question': '¿Qué es un espectro electromagnético?', 'answer': 'Conjunto de todas las frecuencias de radiación electromagnética.'},
+    {'question': '¿Qué es el principio de incertidumbre?', 'answer': 'No se puede conocer simultáneamente con precisión la posición y el momento de una partícula.'},
+    {'question': '¿Qué es el efecto fotoeléctrico?', 'answer': 'Emisión de electrones de un material cuando se ilumina con luz de cierta frecuencia.'},
+    {'question': '¿Qué es el calor latente?', 'answer': 'Cantidad de calor necesario para cambiar el estado de una sustancia sin cambiar su temperatura.'},
+    {'question': '¿Qué es la longitud focal de una lente?', 'answer': 'Distancia desde el centro de la lente hasta el foco donde convergen los rayos.'},
   ];
 
+  List<Map<String, String>> selectedFlashcards = [];
   int currentIndex = 0;
   bool showAnswer = false;
-  late AnimationController _flipController;
-  late AnimationController _slideController;
-  late AnimationController _pulseController;
-  late Animation<double> _flipAnimation;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _pulseAnimation;
-
-  // Colores gradientes para las tarjetas (versión oscura)
-  final List<List<Color>> cardGradients = [
-    [Color(0xFF434343), Color(0xFF000000)], // Gris oscuro a negro
-    [Color(0xFF2c3e50), Color(0xFF4ca1af)], // Azul oscuro a turquesa
-    [Color(0xFF8e0e00), Color(0xFF1f1c18)], // Rojo oscuro a negro
-    [Color(0xFF1a2980), Color(0xFF26d0ce)], // Azul marino a cyan
-    [Color(0xFF614385), Color(0xFF516395)], // Púrpura a azul
-    [Color(0xFF16222A), Color(0xFF3A6073)], // Azul muy oscuro a azul
-    [Color(0xFF200122), Color(0xFF6f0000)], // Púrpura oscuro a rojo oscuro
-    [Color(0xFF0f2027), Color(0xFF203a43)], // Azul oscuro a azul grisáceo
-    [Color(0xFF283048), Color(0xFF859398)], // Azul oscuro a gris
-    [Color(0xFF232526), Color(0xFF414345)], // Gris oscuro a gris más oscuro
-    [Color(0xFF1D4350), Color(0xFFA43931)], // Azul verdoso a rojo oscuro
-    [Color(0xFF3a7bd5), Color(0xFF00d2ff)], // Azul a cyan (único más claro)
-  ];
 
   @override
   void initState() {
     super.initState();
-
-    _flipController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _slideController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    )..forward(); // Iniciar la animación al comenzar
-
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    )..repeat(reverse: true);
-
-    _flipAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _flipController,
-      curve: Curves.easeInOut,
-    ));
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(1.0, 0.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.elasticOut,
-    ));
-
-    _pulseAnimation = Tween<double>(
-      begin: 0.9,
-      end: 1.1,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    pickRandomFlashcards();
   }
 
-  @override
-  void dispose() {
-    _flipController.dispose();
-    _slideController.dispose();
-    _pulseController.dispose();
-    super.dispose();
+  void pickRandomFlashcards() {
+    final random = Random();
+    selectedFlashcards = List.from(flashcards)..shuffle(random);
+    selectedFlashcards = selectedFlashcards.take(10).toList();
+    currentIndex = 0;
+    showAnswer = false;
   }
 
   void nextCard() {
     setState(() {
-      currentIndex = (currentIndex + 1) % flashcards.length;
+      currentIndex = (currentIndex + 1) % selectedFlashcards.length;
       showAnswer = false;
     });
-
-    _slideController.forward(from: 0.0);
-    _flipController.reset();
   }
 
   void toggleCard() {
     setState(() {
       showAnswer = !showAnswer;
     });
-
-    if (showAnswer) {
-      _flipController.forward();
-    } else {
-      _flipController.reverse();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final card = flashcards[currentIndex];
-    final gradient = cardGradients[currentIndex % cardGradients.length];
+    final card = selectedFlashcards[currentIndex];
+    final progress = (currentIndex + 1) / selectedFlashcards.length;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flashcards'),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF434343), Color(0xFF000000)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              Color(0xFF1a1a1a),
-              Color(0xFF0d0d0d),
+              Colors.deepPurple.shade800,
+              Colors.deepPurple.shade400,
+              Colors.indigo.shade300,
             ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
           ),
         ),
-        child: Center(
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Contador de tarjetas con animación
-              AnimatedBuilder(
-                animation: _pulseAnimation,
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: _pulseAnimation.value,
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: gradient),
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: gradient[0].withOpacity(0.3),
-                            blurRadius: 15,
-                            offset: const Offset(0, 5),
+              // Header
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'Flashcards de Física',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
+                        ),
+                        const SizedBox(width: 48),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 4,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.transparent, Colors.white.withOpacity(0.5), Colors.transparent],
+                        ),
+                        borderRadius: BorderRadius.circular(2),
                       ),
+                    ),
+                    const SizedBox(height: 20),
+                    LinearProgressIndicator(
+                      value: progress,
+                      backgroundColor: Colors.white.withOpacity(0.3),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      minHeight: 6,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        '${currentIndex + 1} / ${flashcards.length}',
+                        '${currentIndex + 1}/${selectedFlashcards.length}',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-
-              // Tarjeta principal con animaciones
-              SlideTransition(
-                position: _slideAnimation,
+              // Tarjeta flashcard
+              Expanded(
                 child: GestureDetector(
                   onTap: toggleCard,
-                  child: AnimatedBuilder(
-                    animation: _flipAnimation,
-                    builder: (context, child) {
-                      final isShowingFront = _flipAnimation.value < 0.5;
-                      return Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()
-                          ..setEntry(3, 2, 0.001)
-                          ..rotateY(_flipAnimation.value * 3.14159),
-                        child: Card(
-                          margin: const EdgeInsets.all(20),
-                          elevation: 15,
-                          shadowColor: gradient[0].withOpacity(0.4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(30),
-                            width: double.infinity,
-                            height: 300,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: gradient,
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: gradient[1].withOpacity(0.3),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Icono animado
-                                AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 300),
-                                  child: Icon(
-                                    showAnswer ? Icons.lightbulb : Icons.help_outline,
-                                    key: ValueKey(showAnswer),
-                                    size: 40,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-
-                                // Texto de la tarjeta (con transformación para compensar el giro)
-                                Expanded(
-                                  child: Center(
-                                    child: Transform(
-                                      transform: Matrix4.identity()
-                                        ..rotateY(_flipAnimation.value * 3.14159),
-                                      alignment: Alignment.center,
-                                      child: AnimatedSwitcher(
-                                        duration: const Duration(milliseconds: 300),
-                                        child: Text(
-                                          isShowingFront || !showAnswer
-                                              ? card['question']!
-                                              : card['answer']!,
-                                          key: ValueKey('${currentIndex}_${showAnswer}'),
-                                          style: const TextStyle(
-                                            fontSize: 22,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            height: 1.4,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                // Indicador de acción
-                                AnimatedOpacity(
-                                  opacity: showAnswer ? 0.7 : 1.0,
-                                  duration: const Duration(milliseconds: 300),
-                                  child: Transform(
-                                    transform: Matrix4.identity()
-                                      ..rotateY(_flipAnimation.value * 3.14159),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      showAnswer ? 'Toca para ver pregunta' : 'Toca para ver respuesta',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white.withOpacity(0.8),
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: showAnswer
+                            ? [Colors.purple.shade400, Colors.purple.shade600]
+                            : [Colors.blue.shade400, Colors.blue.shade600],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
                         ),
-                      );
-                    },
+                      ],
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Text(
+                          showAnswer ? card['answer']! : card['question']!,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-
-              // Botón de progreso
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: LinearProgressIndicator(
-                  value: (currentIndex + 1) / flashcards.length,
-                  backgroundColor: Colors.grey[800],
-                  valueColor: AlwaysStoppedAnimation<Color>(gradient[0]),
-                  minHeight: 6,
+              // Botón siguiente
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: FloatingActionButton(
+                  onPressed: nextCard,
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.deepPurple,
+                  elevation: 5,
+                  child: const Icon(Icons.navigate_next, size: 32),
                 ),
               ),
             ],
           ),
         ),
-      ),
-      floatingActionButton: AnimatedBuilder(
-        animation: _pulseAnimation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _pulseAnimation.value * 0.9 + 0.1,
-            child: FloatingActionButton.extended(
-              onPressed: nextCard,
-              backgroundColor: gradient[0],
-              icon: const Icon(Icons.navigate_next, color: Colors.white),
-              label: const Text(
-                'Siguiente',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              elevation: 8,
-            ),
-          );
-        },
       ),
     );
   }
