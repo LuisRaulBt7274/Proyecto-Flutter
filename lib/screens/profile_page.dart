@@ -11,19 +11,13 @@ class UsersTab extends StatefulWidget {
   State<UsersTab> createState() => _UsersTabState();
 }
 
-class _UsersTabState extends State<UsersTab>
-    with SingleTickerProviderStateMixin {
+class _UsersTabState extends State<UsersTab> {
   final supabase = Supabase.instance.client;
   final _nameController = TextEditingController();
   String? _avatarUrl;
   bool _isLoading = false;
   bool _isAdmin = false; // Nueva variable para verificar si es admin
   late final User _user;
-
-  // Animaciones
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
 
   // Lista de avatares predeterminados
   final List<Map<String, String>> _predefinedAvatars = [
@@ -57,31 +51,7 @@ class _UsersTabState extends State<UsersTab>
   void initState() {
     super.initState();
     _user = supabase.auth.currentUser!;
-
-    // Inicializar animaciones
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
-
     _loadUserProfile();
-    _animationController.forward();
   }
 
   // Método para manejar operaciones asíncronas con manejo de errores
@@ -187,21 +157,13 @@ class _UsersTabState extends State<UsersTab>
                   Navigator.pop(dialogContext);
                   await _selectAvatar(avatar['url']!);
                 },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
+                child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: isSelected ? Theme.of(context).primaryColor : Colors.grey.shade300,
                       width: isSelected ? 3 : 1,
                     ),
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: isSelected ? [
-                      BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ] : null,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -398,7 +360,6 @@ class _UsersTabState extends State<UsersTab>
 
   @override
   void dispose() {
-    _animationController.dispose();
     _nameController.dispose();
     super.dispose();
   }
@@ -432,11 +393,7 @@ class _UsersTabState extends State<UsersTab>
           ],
         ),
       )
-          : FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: SingleChildScrollView(
+          : SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -520,13 +477,6 @@ class _UsersTabState extends State<UsersTab>
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).primaryColor.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
                           ),
                           child: const Icon(
                             Icons.edit,
@@ -794,8 +744,6 @@ class _UsersTabState extends State<UsersTab>
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
+      );
+    }
 }
